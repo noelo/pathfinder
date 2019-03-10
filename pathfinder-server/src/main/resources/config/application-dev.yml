@@ -45,6 +45,9 @@ spring:
         cache-seconds: 1
     thymeleaf:
         cache: false
+    mvc:
+        view.prefix: /WEB-INF/
+        view.suffix: .jsp
 
 # ===================================================================
 # To enable SSL, generate a certificate using:

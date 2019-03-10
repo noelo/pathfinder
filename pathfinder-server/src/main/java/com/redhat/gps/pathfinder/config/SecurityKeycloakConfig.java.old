@@ -46,8 +46,8 @@ import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 //@KeycloakConfiguration
 //@Import(SecurityProblemSupport.class)
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+//@EnableWebSecurity
+//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityKeycloakConfig
 //  extends KeycloakWebSecurityConfigurerAdapter
   {

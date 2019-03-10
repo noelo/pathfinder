@@ -25,7 +25,11 @@ package com.redhat.gps.pathfinder.web.api.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -34,9 +38,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
   @Autowired
   private JwtAuthenticationEntryPoint authEntryPoint;
@@ -46,6 +49,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
   
   @Autowired
   JwtTokenUtil jwtTokenUtil;
+
+  @Override
+  public void configure(WebSecurity web) throws Exception {
+    web.ignoring()
+            .antMatchers(HttpMethod.OPTIONS, "/**")
+            .antMatchers("/app/**/*.{js,html}")
+            .antMatchers("/i18n/**")
+            .antMatchers("/content/**")
+            .antMatchers("/swagger-ui/index.html")
+            .antMatchers("/test/**")
+            .antMatchers("/pathfinder/**");
+  }
   
   @Override
   protected void configure(HttpSecurity http) throws Exception{
@@ -74,6 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //          .antMatchers("/api/pathfinder/**").permitAll()
       
 		  		.antMatchers("/docs**").permitAll()
+                .antMatchers("/pathfinder/**").permitAll()
 		  		.antMatchers("/auth").permitAll()
 		  		.antMatchers("/management/health").permitAll()
 		  		.antMatchers("/api/pathfinder/docs**").permitAll()
