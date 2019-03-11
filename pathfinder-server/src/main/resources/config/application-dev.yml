@@ -46,7 +46,7 @@ spring:
     thymeleaf:
         cache: false
     mvc:
-        view.prefix: /WEB-INF/
+        view.prefix: /WEB-INF/jsp/
         view.suffix: .jsp
 
 # ===================================================================

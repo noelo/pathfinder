@@ -1,4 +1,4 @@
-package com.redhat.pathfinder;
+package com.redhat.gps.pathfinder;
 
 /*-
  * #%L
@@ -22,18 +22,11 @@ package com.redhat.pathfinder;
  * #L%
  */
 
-import static io.restassured.RestAssured.given;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import groovy.lang.Tuple2;
+import io.restassured.specification.RequestSpecification;
+import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,23 +36,13 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.util.*;
 
-import org.apache.commons.io.IOUtils;
-import org.bson.Document;
-import org.bson.codecs.BsonTypeClassMap;
-import org.bson.codecs.DocumentCodec;
-import org.bson.codecs.configuration.CodecRegistries;
-import org.bson.codecs.configuration.CodecRegistry;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.ServerAddress;
-import com.mongodb.client.MongoDatabase;
-
-import groovy.lang.Tuple2;
-import io.restassured.specification.RequestSpecification;
+import static io.restassured.RestAssured.given;
 
 
 @Path("/pathfinder/")
@@ -96,7 +79,7 @@ public class Controller {
         //  System.out.println("DEFAULTING SERVER TO: 'http://localhost:8080' because no environment variable '"+name+"' was found");
         //  return "http://localhost:8080";
         //}
-        return System.getenv(name);
+        return System.getenv("localhost:8080");
 //    }
     }
 

@@ -1,4 +1,4 @@
-package com.redhat.pathfinder;
+package com.redhat.gps.pathfinder;
 
 /*-
  * #%L

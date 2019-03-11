@@ -1,10 +1,4 @@
 package com.redhat.gps.pathfinder.web.api.security;
-
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
-
 /*-
  * #%L
  * Pathfinder
@@ -16,9 +10,9 @@ import java.util.Map;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -27,12 +21,10 @@ import java.util.Map;
  * #L%
  */
 
-
-import java.util.Objects;
-
-import javax.servlet.Filter;
-import javax.servlet.http.HttpServletRequest;
-
+import com.redhat.gps.pathfinder.domain.Member;
+import com.redhat.gps.pathfinder.repository.MembersRepository;
+import com.redhat.gps.pathfinder.service.util.MapBuilder;
+import mjson.Json;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,26 +37,16 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.FilterChainProxy;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-//import org.zerhusen.security.JwtAuthenticationRequest;
-//import org.zerhusen.security.JwtTokenUtil;
-//import org.zerhusen.security.JwtUser;
-//import org.zerhusen.security.service.JwtAuthenticationResponse;
 
-import com.google.common.base.Function;
-import com.redhat.gps.pathfinder.domain.Member;
-import com.redhat.gps.pathfinder.repository.MembersRepository;
-import com.redhat.gps.pathfinder.service.util.MapBuilder;
-import com.redhat.gps.pathfinder.service.util.Tuple;
+import javax.servlet.http.HttpServletRequest;
+import java.net.URISyntaxException;
+import java.util.Objects;
 
-import mjson.Json;
+
 
 @RestController
 public class AuthenticationRestController {
@@ -91,14 +73,7 @@ public class AuthenticationRestController {
         String password=jsonReq.at("password").asString();
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
-        
-//        Tuple<String, String> user=new Function<Json, Tuple<String,String>>(){
-//          @Override public Tuple<String,String> apply(Json json){
-//            return new Tuple<String,String>(json.at("username").asString(),json.at("password").asString());
-//        }}.apply(Json.read(authRequest));
-//        Objects.requireNonNull(user.getFirst());
-//        Objects.requireNonNull(user.getSecond());
-        
+
         try {
           if (null==authenticationManager) authenticationManager=new CustomAuthenticationProvider(membersRepository);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -149,19 +124,4 @@ public class AuthenticationRestController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-//    /**
-//     * Authenticates the user. If something is wrong, an {@link AuthenticationException} will be thrown
-//     */
-//    private void authenticate(String username, String password) {
-//        Objects.requireNonNull(username);
-//        Objects.requireNonNull(password);
-//
-//        try {
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-//        } catch (DisabledException e) {
-//            throw new RuntimeException("User is disabled!", e);
-//        } catch (BadCredentialsException e) {
-//            throw new RuntimeException("Bad credentials!", e);
-//        }
-//    }
 }

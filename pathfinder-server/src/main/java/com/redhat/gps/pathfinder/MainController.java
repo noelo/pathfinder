@@ -22,14 +22,17 @@ package com.redhat.gps.pathfinder;
  * #L%
  */
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-public class Json {
+@Controller
+public class MainController {
 
-  public static ObjectMapper newObjectMapper(boolean pretty){
-    ObjectMapper mapper = new ObjectMapper();
-    mapper.configure(SerializationConfig.Feature.INDENT_OUTPUT,pretty);
-    return mapper;
-  }
+    @RequestMapping(value="/pathtest", method = RequestMethod.GET)
+    public String showLoginPage(ModelMap model){
+        return "index";
+    }
+
 }
