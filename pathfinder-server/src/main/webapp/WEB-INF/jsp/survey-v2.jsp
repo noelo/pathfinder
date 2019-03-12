@@ -91,7 +91,7 @@
 				/* /change to add question weighting colors to left of radio buttons */
 			</style>
 			<!--
-			<script src="utils.jsp"></script>
+			<script src="assets/js/pathfinder-utils.js"></script>
 			-->
 			<script>
 				var results=null;

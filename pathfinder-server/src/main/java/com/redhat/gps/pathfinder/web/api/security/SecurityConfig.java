@@ -37,9 +37,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-//@Configuration
-//@EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
+@Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     UserDetailsService userDetailsService;
@@ -57,6 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/content/**")
                 .antMatchers("/swagger-ui/index.html")
                 .antMatchers("/test/**")
+                .antMatchers("/*.jsp")
                 .antMatchers("/pathfinder/**");
     }
 
@@ -70,6 +71,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers("/docs**").permitAll()
                     .antMatchers("/pathfinder/**").permitAll()
                     .antMatchers("/auth").permitAll()
+                    .antMatchers("/login").permitAll()
                     .antMatchers("/management/health").permitAll()
                     .antMatchers("/api/pathfinder/docs**").permitAll()
                     .antMatchers("/api/pathfinder/survey").permitAll()

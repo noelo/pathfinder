@@ -1,6 +1,40 @@
 package com.redhat.gps.pathfinder.web.api;
 
+import com.codahale.metrics.annotation.Timed;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
+import com.redhat.gps.pathfinder.domain.ApplicationAssessmentReview;
+import com.redhat.gps.pathfinder.domain.Applications;
+import com.redhat.gps.pathfinder.domain.Assessments;
+import com.redhat.gps.pathfinder.domain.Customer;
+import com.redhat.gps.pathfinder.repository.*;
+import com.redhat.gps.pathfinder.service.util.Json;
+import com.redhat.gps.pathfinder.service.util.MapBuilder;
+import com.redhat.gps.pathfinder.web.api.model.*;
+import io.swagger.annotations.ApiParam;
+import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Example;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.Map.Entry;
+
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 /*-
  * #%L
@@ -23,76 +57,6 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
  * limitations under the License.
  * #L%
  */
-
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Example;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.codahale.metrics.annotation.Timed;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
-import com.redhat.gps.pathfinder.domain.ApplicationAssessmentReview;
-import com.redhat.gps.pathfinder.domain.Applications;
-import com.redhat.gps.pathfinder.domain.Assessments;
-import com.redhat.gps.pathfinder.domain.Customer;
-import com.redhat.gps.pathfinder.repository.ApplicationsRepository;
-import com.redhat.gps.pathfinder.repository.AssessmentsRepository;
-import com.redhat.gps.pathfinder.repository.CustomerRepository;
-import com.redhat.gps.pathfinder.repository.MembersRepository;
-import com.redhat.gps.pathfinder.repository.ReviewsRepository;
-import com.redhat.gps.pathfinder.service.util.Json;
-import com.redhat.gps.pathfinder.service.util.MapBuilder;
-import com.redhat.gps.pathfinder.web.api.model.ApplicationAssessmentProgressType;
-import com.redhat.gps.pathfinder.web.api.model.ApplicationNames;
-import com.redhat.gps.pathfinder.web.api.model.ApplicationSummaryType;
-import com.redhat.gps.pathfinder.web.api.model.ApplicationType;
-import com.redhat.gps.pathfinder.web.api.model.AssessmentProcessQuestionResultsType;
-import com.redhat.gps.pathfinder.web.api.model.AssessmentProcessType;
-import com.redhat.gps.pathfinder.web.api.model.AssessmentResponse;
-import com.redhat.gps.pathfinder.web.api.model.AssessmentType;
-import com.redhat.gps.pathfinder.web.api.model.CustomerType;
-import com.redhat.gps.pathfinder.web.api.model.DependenciesListType;
-import com.redhat.gps.pathfinder.web.api.model.DepsPairType;
-import com.redhat.gps.pathfinder.web.api.model.IdentifierList;
-import com.redhat.gps.pathfinder.web.api.model.MemberType;
-import com.redhat.gps.pathfinder.web.api.model.ReviewType;
-
-import io.swagger.annotations.ApiParam;
 
 @RestController
 @RequestMapping("/api/pathfinder")

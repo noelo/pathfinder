@@ -29,7 +29,7 @@
 				
 					var dTable=$('#example').DataTable( {
 							"ajax": {
-									"url": Utils.SERVER+'/api/pathfinder/customers/',
+									"url": '/api/pathfinder/customers/',
 									//"beforeSend": function(xhr){
 									//		xhr.setRequestHeader(jwtToken);
 									//},
@@ -164,8 +164,8 @@
 					}
 					
 					// start upload
-					//var url=addAuthToken(Utils.SERVER+$("#FileUpload1").attr('action'));
-					var url=addAuthToken(Utils.SERVER+$('#importForm').attr('data-action'));
+					//var url=addAuthToken($("#FileUpload1").attr('action'));
+					var url=addAuthToken($('#importForm').attr('data-action'));
 					xhr.open("POST", url, true);
 					xhr.setRequestHeader("X-FILENAME", fileName);
 					xhr.send($('#FileUpload1')[0].files[0]);
@@ -179,7 +179,7 @@
 				caller.disabled=true;
 				
 				// call to back-end
-				var url=addAuthToken(Utils.SERVER+"/api/pathfinder/customers/export?ids="+getSelected());
+				var url=addAuthToken("/api/pathfinder/customers/export?ids="+getSelected());
 				// call to UI
 				//var url=addAuthToken("${pageContext.request.contextPath}/api/pathfinder/customers/export?ids="+getSelected());
 				
@@ -197,7 +197,7 @@
 						return false;
 				}else{
 					caller.disabled=true;
-					httpDelete(Utils.SERVER+"/api/pathfinder/customers/", getSelected());
+					httpDelete("/api/pathfinder/customers/", getSelected());
 				}
 			}
 		</script>

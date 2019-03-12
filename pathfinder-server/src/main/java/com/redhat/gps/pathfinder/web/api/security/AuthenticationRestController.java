@@ -37,6 +37,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,12 +45,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URISyntaxException;
+import java.util.EnumMap;
 import java.util.Objects;
 
-
-
 @RestController
+@Service
 public class AuthenticationRestController {
+    public enum AuthKeys
+    {
+        TOKEN, USERNAME, DISPLAYNAME;
+    }
 
     @Value("Authorization")
     private String tokenHeader;
@@ -74,6 +79,13 @@ public class AuthenticationRestController {
         Objects.requireNonNull(username);
         Objects.requireNonNull(password);
 
+        EnumMap<AuthKeys, String> resp = getResponseEntity(username, password);
+
+        return buildResult(resp.get(AuthKeys.TOKEN), resp.get(AuthKeys.USERNAME),resp.get(AuthKeys.DISPLAYNAME));
+    }
+
+    public EnumMap<AuthKeys, String> getResponseEntity(String username, String password) throws CredentialsException {
+        EnumMap<AuthKeys, String> resp = new EnumMap<>(AuthKeys.class);
         try {
           if (null==authenticationManager) authenticationManager=new CustomAuthenticationProvider(membersRepository);
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
@@ -82,19 +94,21 @@ public class AuthenticationRestController {
         } catch (BadCredentialsException e) {
             throw new CredentialsException("Bad credentials!", e);
         }
-        
+
         // Reload password post-security so we can generate the token
         try{
           final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
           final String token = jwtTokenUtil.generateToken(userDetails);
-          
+
           Member member=membersRepository.findOne(username);
-          
-          return buildResult(token, member);
+          resp.put(AuthKeys.TOKEN,token);
+          resp.put(AuthKeys.USERNAME,member.getUsername());
+          resp.put(AuthKeys.DISPLAYNAME,member.getDisplayName());
+
+          return resp;
         }catch(UsernameNotFoundException e){
           throw new CredentialsException("No user with the name "+username);
         }
-        
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.GET)
@@ -109,14 +123,14 @@ public class AuthenticationRestController {
         
         String refreshedToken = jwtTokenUtil.refreshToken(token);
         
-        return buildResult(refreshedToken, member);
+        return buildResult(refreshedToken, member.getUsername(),member.getDisplayName());
     }
     
-    private ResponseEntity buildResult(String token, Member member){
+    private ResponseEntity buildResult(String token, String userName, String displayName){
       return ResponseEntity.ok(new MapBuilder<String,String>()
           .put("token", token)
-          .put("username", member.getUsername())
-          .put("displayName", member.getDisplayName())
+          .put("username", userName)
+          .put("displayName", displayName)
           .build());
     }
 

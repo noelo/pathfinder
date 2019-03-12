@@ -29,8 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.redhat.gps.pathfinder.web.api.CustomerAPIImpl;
-
 public class RequestUtils{
   private static final Logger log = LoggerFactory.getLogger(RequestUtils.class);
   

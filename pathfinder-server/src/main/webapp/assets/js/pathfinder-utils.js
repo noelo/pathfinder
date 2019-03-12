@@ -1,5 +1,3 @@
-<%@ page import="com.redhat.gps.pathfinder.Controller" %>
-
 function addAuthToken(url){
   var separator;
   if (!url.includes("_t=") && (jwtToken!="" || jwtToken!=undefined || jwtToken!=null)){
@@ -15,20 +13,7 @@ function addAuthToken(url){
 	return url;
 }
 
-Utils = {
-//  SERVER: "http://localhost:8080", 
-//  SERVER: "http://pathtest-pathfinder.6923.rh-us-east-1.openshiftapps.com",
-//  SERVER: "${pathfinderUrl}",
-//  SERVER: "<%=Controller.getProperty("PATHFINDER_SERVER")%>",
-  SERVER: "",
-  
-  chartColors: {
-  	"UNKNOWN": "#808080",
-		"RED": "#cc0000",
-		"AMBER": "#ec7a08",
-		"GREEN": "#92d400"
-  },
-	getParameterByName: function(name, url) {
+function getParameterByName(name, url) {
 		  if (!url) url = window.location.href;
 		  name = name.replace(/[\[\]]/g, "\\$&");
 		  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -37,4 +22,13 @@ Utils = {
 		  if (!results[2]) return '';
 		  return decodeURIComponent(results[2].replace(/\+/g, " "));
 		}
+
+Utils = {
+  SERVER: "",
+  chartColors: {
+  	"UNKNOWN": "#808080",
+		"RED": "#cc0000",
+		"AMBER": "#ec7a08",
+		"GREEN": "#92d400"
+  }
 }

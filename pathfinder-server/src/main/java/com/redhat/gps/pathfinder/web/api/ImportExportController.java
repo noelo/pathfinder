@@ -55,7 +55,6 @@ import com.redhat.gps.pathfinder.repository.ApplicationsRepository;
 import com.redhat.gps.pathfinder.repository.AssessmentsRepository;
 import com.redhat.gps.pathfinder.repository.CustomerRepository;
 import com.redhat.gps.pathfinder.repository.MembersRepository;
-import com.redhat.gps.pathfinder.repository.QuestionMetaDataRepository;
 import com.redhat.gps.pathfinder.repository.ReviewsRepository;
 import com.redhat.gps.pathfinder.service.util.Json;
 
