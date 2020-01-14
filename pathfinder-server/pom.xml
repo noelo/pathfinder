@@ -759,6 +759,7 @@
             <activeByDefault>true</activeByDefault>
           </activation>
           <build>
+              <finalName>pathfinder-server</finalName>
             <plugins>
               <plugin>
                   <groupId>org.springframework.boot</groupId>
@@ -770,9 +771,6 @@
                               <goal>build-info</goal>
                               <goal>repackage</goal>
                           </goals>
-                          <configuration>
-                              <classifier>exec</classifier>
-                          </configuration>
                       </execution>
                   </executions>
                   <configuration>
